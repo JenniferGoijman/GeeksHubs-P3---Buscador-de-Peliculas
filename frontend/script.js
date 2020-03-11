@@ -1,18 +1,41 @@
-//cargar pelis por popularidad      
+//Carga peliculas por popularidad por default
 axios.get('https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=1')
     .then(res=>{ 
         const peliculas =res.data.results
         peliculas.forEach(pelicula => {
             document.querySelector('.peliculas').innerHTML +=`
             <div class="card" style="width: 11rem;" id=${pelicula.id}>
-                <img src="http://image.tmdb.org/t/p/w185/${pelicula.poster_path}" class="card-img-top" alt="..." data-toggle="modal" data-target="#exampleModal">
+                <img src="http://image.tmdb.org/t/p/w185/${pelicula.poster_path}" class="card-img-top" alt="..." 
+                onclick="getPeliID(event, ${pelicula.id})">
                 <div class="card-body">
                     <h6 class="card-title">${pelicula.title}</h6>
                 </div>
             </div>`
-        })
+        })//img: data-toggle="modal" data-target="#exampleModal"
     })
     .catch(error => console.error(error))
+
+//Carga generos en dropdown
+//array de generos
+//https://api.themoviedb.org/3/genre/movie/list?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES
+//genres: [ { id: 28, name: "Acción"}, { id: 12, name: "Aventura" }, { id: 16, name: "Animación" }, { id: 35, name: "Comedia" } ]
+/*
+axios.get('https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=1')
+    .then(res=>{ 
+        const peliculas =res.data.results
+        peliculas.forEach(pelicula => {
+            document.querySelector('.peliculas').innerHTML +=`
+            <div class="card" style="width: 11rem;" id=${pelicula.id}>
+                <img src="http://image.tmdb.org/t/p/w185/${pelicula.poster_path}" class="card-img-top" alt="..." 
+                onclick="getPeliID(event, ${pelicula.id})">
+                <div class="card-body">
+                    <h6 class="card-title">${pelicula.title}</h6>
+                </div>
+            </div>`
+        })//img: data-toggle="modal" data-target="#exampleModal"
+    })
+    .catch(error => console.error(error))
+*/
 
 document.querySelector('input.form-control.mr-sm-2').addEventListener("keyup", function (event) {
     busqueda = event.target.value;
@@ -36,6 +59,19 @@ document.querySelector('input.form-control.mr-sm-2').addEventListener("keyup", f
     })
     .catch(error => console.error(error))
 })
+
+function getPeliID (event, movieId) {
+    //buscar por movieID //https://api.themoviedb.org/3/movie/475303?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES
+    axios.get(`https://api.themoviedb.org/3/movie/${movieId}?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES`)
+    .then(res => {
+        const pelicula = res.data;
+        let generos = '';
+        pelicula.genres.forEach(genre => {generos += genre.name + ", "});
+        alert("Titulo: " + pelicula.title + "; Descripción: " + pelicula.overview + "; Generos: " + generos);           
+    })
+    .catch(error => console.error(error))
+
+}
 
 /*
 function getMoviesInput (event) {
@@ -62,14 +98,6 @@ function getMoviesInput (event) {
         }
 }
 */
-//array de generos
-//https://api.themoviedb.org/3/genre/movie/list?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES
-//genres: [ { id: 28, name: "Acción"}, { id: 12, name: "Aventura" }, { id: 16, name: "Animación" }, { id: 35, name: "Comedia" } ]
-
-//buscar por movieID
-//https://api.themoviedb.org/3/movie/{movie_id}?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES
-
-
         
         /*
         function showModal() {
