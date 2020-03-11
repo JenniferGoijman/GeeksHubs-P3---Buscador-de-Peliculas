@@ -30,7 +30,7 @@ li {
     margin-left: 20px;
 }
 
-.peliculas {
+.divMovies {
     display: grid;
     grid-template: repeat(5, 1fr)/repeat(7, 1fr);
     margin: 1em;
@@ -66,4 +66,10 @@ li {
 .modalInfo {
     padding: 10px;
     font-size: 15px;
+}
+
+@media (min-width: 576px){
+    .modal-dialog {
+        max-width: 800px;
+    }
 }
