@@ -1,3 +1,19 @@
+//cargar pelis por popularidad      
+axios.get('https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=1')
+    .then(res=>{ 
+        const peliculas =res.data.results
+        peliculas.forEach(pelicula => {
+            document.querySelector('.peliculas').innerHTML +=`
+            <div class="card" style="width: 11rem;" id=${pelicula.id}>
+                <img src="http://image.tmdb.org/t/p/w185/${pelicula.poster_path}" class="card-img-top" alt="..." data-toggle="modal" data-target="#exampleModal">
+                <div class="card-body">
+                    <h6 class="card-title">${pelicula.title}</h6>
+                </div>
+            </div>`
+        })
+    })
+    .catch(error => console.error(error))
+
 document.querySelector('input.form-control.mr-sm-2').addEventListener("keyup", function (event) {
     busqueda = event.target.value;
     axios.get('https://api.themoviedb.org/3/search/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&query=' + busqueda)
@@ -21,55 +37,40 @@ document.querySelector('input.form-control.mr-sm-2').addEventListener("keyup", f
     .catch(error => console.error(error))
 })
 
-        /*
-        function getMoviesInput (event) {
-             if (event.key === "Enter" || event.type === "click") {
-                 if (document.querySelector('.form-control').value != '') {
-                    busqueda = event.target.value;
-                    axios.get('https://api.themoviedb.org/3/search/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&query='+busqueda)
-                    .then(res=>{ 
-                        const peliculas = res.data.results;
-                        document.querySelector('.peliculas').innerHTML = '';
-                        console.log(peliculas[0].title);
-                        peliculas.forEach(pelicula => {
-                            console.log(pelicula.title);
-                            document.querySelector('.peliculas').innerHTML +=`
-                            <div class="card" style="width: 11rem;" id=${pelicula.id}>
-                                <img src="http://image.tmdb.org/t/p/w185/${pelicula.poster_path}" class="card-img-top" alt="..." data-toggle="modal" data-target="#exampleModal">
-                                <div class="card-body">
-                                    <h6 class="card-title">${pelicula.title}</h6>
-                                </div>
-                            </div>`;
-                        })
-                    })
-                    .catch(error => console.error(error))
-             }
-        }
-        */
-        //array de generos
-        //https://api.themoviedb.org/3/genre/movie/list?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES
-        //genres: [ { id: 28, name: "Acción"}, { id: 12, name: "Aventura" }, { id: 16, name: "Animación" }, { id: 35, name: "Comedia" } ]
-
-        //buscar por movieID
-        //https://api.themoviedb.org/3/movie/{movie_id}?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES
-
-        //cargar pelis por popularidad
-        /*
-        axios.get('https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=1')
+/*
+function getMoviesInput (event) {
+        if (event.key === "Enter" || event.type === "click") {
+            if (document.querySelector('.form-control').value != '') {
+            busqueda = event.target.value;
+            axios.get('https://api.themoviedb.org/3/search/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&query='+busqueda)
             .then(res=>{ 
-                const peliculas =res.data.results
+                const peliculas = res.data.results;
+                document.querySelector('.peliculas').innerHTML = '';
+                console.log(peliculas[0].title);
                 peliculas.forEach(pelicula => {
+                    console.log(pelicula.title);
                     document.querySelector('.peliculas').innerHTML +=`
                     <div class="card" style="width: 11rem;" id=${pelicula.id}>
                         <img src="http://image.tmdb.org/t/p/w185/${pelicula.poster_path}" class="card-img-top" alt="..." data-toggle="modal" data-target="#exampleModal">
                         <div class="card-body">
                             <h6 class="card-title">${pelicula.title}</h6>
                         </div>
-                    </div>`
+                    </div>`;
                 })
             })
             .catch(error => console.error(error))
-        */
+        }
+}
+*/
+//array de generos
+//https://api.themoviedb.org/3/genre/movie/list?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES
+//genres: [ { id: 28, name: "Acción"}, { id: 12, name: "Aventura" }, { id: 16, name: "Animación" }, { id: 35, name: "Comedia" } ]
+
+//buscar por movieID
+//https://api.themoviedb.org/3/movie/{movie_id}?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES
+
+
+        
         /*
         function showModal() {
             document.querySelector('.modal').innerHTML +=`
