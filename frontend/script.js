@@ -2,17 +2,16 @@ const searchInput = document.querySelector('input.form-control.mr-sm-2')
 //Carga peliculas por popularidad por default
 axios.get('https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=1')
     .then(res => {
-        const peliculas = res.data.results
+        const peliculas = res.data.results;
         peliculas.forEach(pelicula => {
             document.querySelector('.divMovies').innerHTML += `
             <div class="card" style="width: 10rem;" id=${pelicula.id}>
-                <img src="http://image.tmdb.org/t/p/w185/${pelicula.poster_path}" class="card-img-top" alt="..." 
-                onclick="getMovieById(event, ${pelicula.id})">
+                <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg':"http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-top" alt="..." onclick="getMovieById(event, ${pelicula.id})">
                 <div class="card-body">
                     <h6 class="card-title">${pelicula.title}</h6>
                 </div>
             </div>`
-        }) //img: data-toggle="modal" data-target="#exampleModal"
+        })
     })
     .catch(error => console.error(error))
 
@@ -21,14 +20,15 @@ axios.get('https://api.themoviedb.org/3/genre/movie/list?api_key=cea68b520beecac
     .then(res => {
         const generos = res.data.genres;
         generos.forEach(genero => {
-            document.querySelector('.listaGeneros').innerHTML += ` <a class="dropdown-item" href="#" id=${genero.id} onclick="getMoviesByGenre(event, ${genero.id})">${genero.name}</a>`;
+            document.querySelector('.listaGeneros').innerHTML += ` <a class="dropdown-item" href="#" id=${genero.id} 
+            onclick="getMoviesByGenre(event, ${genero.id})">${genero.name}</a>`;
         })
     })
     .catch(error => console.error(error))
 searchInput.addEventListener("input", function (event) {
-    if('' == this.value) {
+    if ('' == this.value) {
         document.querySelector('.divMovies').innerHTML = '';
-      }
+    }
 })
 
 searchInput.addEventListener("keyup", function (event) {
@@ -41,7 +41,7 @@ searchInput.addEventListener("keyup", function (event) {
                 peliculas.forEach(pelicula => {
                     document.querySelector('.divMovies').innerHTML += `
                     <div class="card" style="width: 10rem;" id=${pelicula.id}>
-                    <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg':"http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-top" alt="..." data-toggle="modal" data-target="#exampleModal">
+                    <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg':"http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-top" alt="..." onclick="getMovieById(event, ${pelicula.id})">
                     <div class="card-body">
                     <h6 class="card-title">${pelicula.title}</h6>
                     </div>
@@ -58,19 +58,19 @@ function getMovieById(event, movieId) {
     axios.get(`https://api.themoviedb.org/3/movie/${movieId}?api_key=cea68b520beecac6718820e4ac576c3a&append_to_response=credits&language=es-ES`)
         .then(res => {
             const pelicula = res.data;
-            
+
             let generos = '';
             pelicula.genres.forEach(genre => {
                 generos += genre.name + ", "
             });
             generos = generos.substring(0, generos.length - 2);
-            
+
             let actores = '';
             for (let i = 0; i < 10; i++) {
                 actores += pelicula.credits.cast[i].name + ", "
             }
             actores = actores.substring(0, actores.length - 2);
-            
+
             showModal(pelicula, generos, actores);
         })
         .catch(error => console.error(error))
@@ -85,7 +85,7 @@ function getMoviesByGenre(event, genreId) {
                 peliculas.forEach(pelicula => {
                     document.querySelector('.divMovies').innerHTML += `
                 <div class="card" style="width: 11rem;" id=${pelicula.id}>
-                <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg':"http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-top" alt="..." data-toggle="modal" data-target="#exampleModal">
+                <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg':"http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-top" alt="..." onclick="getMovieById(event, ${pelicula.id})">
                 <div class="card-body">
                 <h6 class="card-title">${pelicula.title}</h6>
                 </div>
@@ -112,7 +112,8 @@ function showModal(pelicula, generos, actores) {
                     </div>
                     
                     <div class="modal-body">
-                        <img src="http://image.tmdb.org/t/p/w185/${pelicula.poster_path}" class="card-img-left" alt="...">
+                        <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg':
+                            "http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-left" alt="...">
                         <div class="modalInfo">
                             <div>
                                 ${pelicula.overview}
