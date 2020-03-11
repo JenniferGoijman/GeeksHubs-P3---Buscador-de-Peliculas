@@ -32,12 +32,14 @@ li {
 
 .divMovies {
     display: grid;
-    grid-template: repeat(5, 1fr)/repeat(7, 1fr);
+    grid-template-columns: repeat(auto-fill, 160px);
     margin: 1em;
+    grid-gap: 20px;
+    justify-content: center;
 }
 
 .card {
-    margin: 5px;
+    margin: 10px;
 }
 .card-body {
     height: 66px;
@@ -66,6 +68,9 @@ li {
 .modalInfo {
     padding: 10px;
     font-size: 15px;
+}
+@media (max-width: 600px) {
+
 }
 
 @media (min-width: 576px){
