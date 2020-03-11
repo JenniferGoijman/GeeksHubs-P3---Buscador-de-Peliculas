@@ -1,0 +1,59 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #ebf0f6;
+    opacity: 0.9;
+    font-size: 18px;
+    color: #132238;
+}
+
+nav {
+    background-color: #98ccd3;
+}
+
+.logoCisne {
+    height: 40px;
+    margin-left: 20px;
+}
+
+.peliculas {
+    display: grid;
+    grid-template: repeat(5, 1fr)/repeat(6, 1fr);
+    padding: 20px;
+}
+
+.card {
+    margin: 5px;
+}
+.card-body {
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    padding-left: 10px;
+    margin-top: 10px;
+}
+.card-img-top {
+    height: 250px;
+}
+.btn-outline-success {
+    color: #132238;
+    border-color: #132238;
+}
+.btn-outline-success:hover {
+    background-color: #364e68;
+    border-color: #98ccd3;
+}
+.modal-body{
+    display: flex;
+}
+.card-img-left{
+    width: 200px;
+}
+.modalInfo {
+    padding: 10px;
+    font-size: 15px;
+}
