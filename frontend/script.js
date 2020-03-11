@@ -56,7 +56,7 @@ function getMovieById(event, movieId) {
             pelicula.genres.forEach(genre => {
                 generos += genre.name + ", "
             });
-            alert("Titulo: " + pelicula.title + "; Descripción: " + pelicula.overview + "; Generos: " + generos);
+            showModal(pelicula);
         })
         .catch(error => console.error(error))
 }
@@ -83,54 +83,24 @@ function getMoviesByGenre(event, genreId) {
         .catch(error => console.error(error))
 }
 
-
-/*
-function getMoviesInput (event) {
-        if (event.key === "Enter" || event.type === "click") {
-            if (document.querySelector('.form-control').value != '') {
-            busqueda = event.target.value;
-            axios.get('https://api.themoviedb.org/3/search/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&query='+busqueda)
-            .then(res=>{ 
-                const peliculas = res.data.results;
-                document.querySelector('.peliculas').innerHTML = '';
-                console.log(peliculas[0].title);
-                peliculas.forEach(pelicula => {
-                    console.log(pelicula.title);
-                    document.querySelector('.peliculas').innerHTML +=`
-                    <div class="card" style="width: 11rem;" id=${pelicula.id}>
-                        <img src="http://image.tmdb.org/t/p/w185/${pelicula.poster_path}" class="card-img-top" alt="..." data-toggle="modal" data-target="#exampleModal">
-                        <div class="card-body">
-                            <h6 class="card-title">${pelicula.title}</h6>
-                        </div>
-                    </div>`;
-                })
-            })
-            .catch(error => console.error(error))
-        }
-}
-*/
-
-/*
-function showModal() {
-    document.querySelector('.modal').innerHTML +=`
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+function showModal(pelicula) {
+    document.querySelector('.divModal').innerHTML =`
+    <div class="modal fade" id="moviesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Con amor, Simon</h5>
+                        <h5 class="modal-title" id="movieTitle">${pelicula.title}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     
                     <div class="modal-body">
-                        <img src="http://image.tmdb.org/t/p/w342/zaUWIdiXvKWydu9QxtsY7RUu8Kv.jpg" class="card-img-left" alt="...">
+                        <img src="http://image.tmdb.org/t/p/w185/${pelicula.poster_path}" class="card-img-left" alt="...">
                         <div class="modalInfo">
                             <div>
-                                Simon Spier es un joven 16 años que no se atreve a revelar su homosexualidad, ya que prefiere
-                                esperar al musical que se celebra en secundaria. Pero un día, uno de sus correos electrónicos llega
-                                a manos equivocadas y las cosas se complican extraordinariamente.
+                                ${pelicula.overview}
                             </div><br>
                             <div>
                                 Géneros 
@@ -143,10 +113,10 @@ function showModal() {
                 </div>
             </div>
         </div>`
+        $('#moviesModal').modal('show');
     }
 
 
 
 //<p class="card-text">${pelicula.overview}</p>
 //<a href="#" class="btn btn-primary">Go somewhere</a>
-*/
