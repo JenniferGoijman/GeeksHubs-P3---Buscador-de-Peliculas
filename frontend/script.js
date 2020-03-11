@@ -19,23 +19,28 @@ axios.get('https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac67
 //array de generos
 //https://api.themoviedb.org/3/genre/movie/list?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES
 //genres: [ { id: 28, name: "Acción"}, { id: 12, name: "Aventura" }, { id: 16, name: "Animación" }, { id: 35, name: "Comedia" } ]
-/*
-axios.get('https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=1')
+axios.get('https://api.themoviedb.org/3/genre/movie/list?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES')
     .then(res=>{ 
-        const peliculas =res.data.results
-        peliculas.forEach(pelicula => {
-            document.querySelector('.peliculas').innerHTML +=`
-            <div class="card" style="width: 11rem;" id=${pelicula.id}>
-                <img src="http://image.tmdb.org/t/p/w185/${pelicula.poster_path}" class="card-img-top" alt="..." 
-                onclick="getPeliID(event, ${pelicula.id})">
-                <div class="card-body">
-                    <h6 class="card-title">${pelicula.title}</h6>
-                </div>
-            </div>`
-        })//img: data-toggle="modal" data-target="#exampleModal"
+        const generos = res.data.genres;
+        generos.forEach(genero => {
+            console.log(genero.id + " - " + genero.name);
+            document.querySelector('.listaGeneros').innerHTML +=`
+                <a class="dropdown-item" href="#" id=${genero.id}>${genero.name}</a>`;
+                    
+
+
+            // document.querySelector('.peliculas').innerHTML +=`
+            // <div class="card" style="width: 11rem;" id=${pelicula.id}>
+            //     <img src="http://image.tmdb.org/t/p/w185/${pelicula.poster_path}" class="card-img-top" alt="..." 
+            //     onclick="getPeliID(event, ${pelicula.id})">
+            //     <div class="card-body">
+            //         <h6 class="card-title">${pelicula.title}</h6>
+            //     </div>
+            // </div>`
+        })
     })
     .catch(error => console.error(error))
-*/
+
 
 document.querySelector('input.form-control.mr-sm-2').addEventListener("keyup", function (event) {
     busqueda = event.target.value;

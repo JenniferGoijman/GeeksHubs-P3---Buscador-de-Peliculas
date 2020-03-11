@@ -15,6 +15,10 @@ nav {
     background-color: #98ccd3;
 }
 
+.dropdown-menu.show {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
 .logoCisne {
     height: 40px;
     margin-left: 20px;
