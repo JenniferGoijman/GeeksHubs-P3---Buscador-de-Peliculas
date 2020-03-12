@@ -5,7 +5,7 @@ axios.get('https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac67
         const peliculas = res.data.results;
         peliculas.forEach(pelicula => {
             document.querySelector('.divMovies').innerHTML += `
-            <div class="card" style="width: 10rem;" id=${pelicula.id}>
+            <div class="card" id=${pelicula.id}>
                 <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg':"http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-top" alt="..." onclick="getMovieById(event, ${pelicula.id})">
                 <div class="card-body">
                     <h6 class="card-title">${pelicula.title}</h6>
@@ -40,7 +40,7 @@ searchInput.addEventListener("keyup", function (event) {
                 document.querySelector('.divMovies').innerHTML = '';
                 peliculas.forEach(pelicula => {
                     document.querySelector('.divMovies').innerHTML += `
-                    <div class="card" style="width: 10rem;" id=${pelicula.id}>
+                    <div class="card" id=${pelicula.id}>
                     <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg':"http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-top" alt="..." onclick="getMovieById(event, ${pelicula.id})">
                     <div class="card-body">
                     <h6 class="card-title">${pelicula.title}</h6>
@@ -84,7 +84,7 @@ function getMoviesByGenre(event, genreId) {
                 document.querySelector('.divMovies').innerHTML = '';
                 peliculas.forEach(pelicula => {
                     document.querySelector('.divMovies').innerHTML += `
-                <div class="card" style="width: 11rem;" id=${pelicula.id}>
+                <div class="card" id=${pelicula.id}>
                 <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg':"http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-top" alt="..." onclick="getMovieById(event, ${pelicula.id})">
                 <div class="card-body">
                 <h6 class="card-title">${pelicula.title}</h6>
