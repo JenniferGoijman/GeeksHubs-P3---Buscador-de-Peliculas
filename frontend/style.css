@@ -77,13 +77,37 @@ li {
     .card {
         width: 8rem;
     }
+    .card-img-left {
+        width: 8rem;
+        height: 13rem;
+        float: left;
+        padding-right: 10px;
+        padding-bottom: 10px;
+    }
     .card-img-top {
-        height: 170px;
+        height: 10rem;
+    }
+    .modal-header {
+        padding: 5px 0 5px 10px;
+    }
+    .modal-title {
+        font-size: 16px;
+    }
+    /*.modal-dialog {
+        max-width: 500px;
+        max-height: 100px;
+    }*/
+    .modal-body {
+        display: unset;
+    }
+    .modalInfo {
+        font-size: 12px;
+        padding: 0;
     }
 }
-/*
+
 @media (min-width: 576px){
     .modal-dialog {
         max-width: 800px;
     }
-}*/
+}
