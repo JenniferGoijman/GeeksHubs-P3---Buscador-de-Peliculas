@@ -20,16 +20,66 @@ axios.get('https://api.themoviedb.org/3/genre/movie/list?api_key=cea68b520beecac
     .then(res => {
         const generos = res.data.genres;
         generos.forEach(genero => {
-            document.querySelector('.listaGeneros').innerHTML += ` <a class="dropdown-item" href="#" id=${genero.id} 
+            document.querySelector('.listaGeneros').innerHTML += ` 
+            <a class="dropdown-item" href="#" id=${genero.id} 
             onclick="getMoviesByGenre(event, ${genero.id})">${genero.name}</a>`;
         })
     })
     .catch(error => console.error(error))
+
 searchInput.addEventListener("input", function (event) {
     if ('' == this.value) {
         document.querySelector('.divMovies').innerHTML = '';
     }
 })
+
+//Carga carrousel
+let carousel = '';
+axios.get('https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=1')
+    .then(res => {
+        const peliculas = res.data.results;
+        document.querySelector('.divCarousel').innerHTML = `
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="carousel-item active" id=${peliculas[0].id}> 
+                    <img class="d-block m-100 mw-100" src="http://image.tmdb.org/t/p/w780/${peliculas[0].backdrop_path}" alt="First slide">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>${peliculas[0].title}</h5>
+                        <p>${peliculas[0].overview}</p>
+                    </div>
+                </div>
+                <div class="carousel-item" id=${peliculas[1].id}>
+                    <img class="d-block m-100 mw-100" src="http://image.tmdb.org/t/p/w780/${peliculas[1].backdrop_path}" alt="Second slide">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>${peliculas[1].title}</h5>
+                        <p>${peliculas[1].overview}</p>
+                    </div>
+                </div>
+                <div class="carousel-item" id=${peliculas[2].id}>
+                    <img class="d-block m-100 mw-100" src="http://image.tmdb.org/t/p/w780/${peliculas[2].backdrop_path}" alt="Third slide">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>${peliculas[2].title}</h5>
+                        <p>${peliculas[2].overview}</p>
+                    </div>
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>`
+                
+    })
+    .catch(error => console.error(error))
 
 searchInput.addEventListener("keyup", function (event) {
     busqueda = event.target.value;

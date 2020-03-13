@@ -8,15 +8,16 @@ body {
     background-color: #ebf0f6;
     opacity: 0.9;
     font-size: 18px;
-    color: #132238;
 }
 
 nav {
     background-color: #98ccd3;
 }
+
 div#navbarTogglerDemo02.collapse.navbar-collapse {
     margin-left: 25px;
 }
+
 li {
     margin-right: 25px;
 }
@@ -25,9 +26,15 @@ li {
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
+
 .logoCisne {
     height: 40px;
     margin-left: 20px;
+}
+
+.divCarousel {
+    display: flex;
+    justify-content: center;
 }
 
 .divMovies {
@@ -41,6 +48,7 @@ li {
 .card {
     width: 10rem;
 }
+
 .card-body {
     height: 66px;
     display: inline-flex;
@@ -48,35 +56,44 @@ li {
     padding: 5px;
     overflow: hidden;
 }
+
 .card-img-top {
     height: 220px;
 }
+
 .btn-outline-success {
     color: #132238;
     border-color: #132238;
 }
+
 .btn-outline-success:hover {
     background-color: #364e68;
     border-color: #98ccd3;
 }
-.modal-body{
+
+.modal-body {
     display: flex;
 }
-.card-img-left{
+
+.card-img-left {
     width: 200px;
 }
+
 .modalInfo {
     padding: 10px;
     font-size: 15px;
 }
+
 @media (max-width: 576px) {
-    .divMovies{
+    .divMovies {
         grid-template-columns: repeat(auto-fill, 126px);
         grid-column-gap: 30px;
     }
+
     .card {
         width: 8rem;
     }
+
     .card-img-left {
         width: 8rem;
         height: 13rem;
@@ -84,18 +101,23 @@ li {
         padding-right: 10px;
         padding-bottom: 10px;
     }
+
     .card-img-top {
         height: 10rem;
     }
+
     .modal-header {
         padding: 5px 0 5px 10px;
     }
+
     .modal-title {
         font-size: 16px;
     }
+
     .modal-body {
         display: unset;
     }
+
     .modalInfo {
         font-size: 12px;
         padding: 0;
@@ -104,7 +126,7 @@ li {
 
 
 
-@media (min-width: 576px){
+@media (min-width: 576px) {
     .modal-dialog {
         max-width: 800px;
     }
