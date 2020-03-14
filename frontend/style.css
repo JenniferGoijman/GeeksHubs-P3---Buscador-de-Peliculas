@@ -114,6 +114,17 @@ li {
 }
 
 @media (max-width: 576px) {
+    .divCarousel {
+        margin: 0;
+        padding: 0;
+        border-radius: 0;
+    }
+
+    .carousel-item img {
+        border-radius: 0;
+    }
+    
+
     .divMovies {
         grid-template-columns: repeat(auto-fill, 126px);
         grid-column-gap: 30px;
