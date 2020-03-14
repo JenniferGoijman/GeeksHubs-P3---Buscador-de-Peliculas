@@ -1,5 +1,6 @@
 const searchInput = document.querySelector('input.form-control.mr-sm-2')
 const main = document.querySelector('main');
+loadHome();
 
 //Carga generos en dropdown por default
 if (document.querySelector('.listaGeneros').innerHTML === "") {
@@ -77,7 +78,7 @@ if (document.querySelector('.divCarousel').innerHTML === "") {
         })
         .catch(error => console.error(error))
 }
-loadHome();
+
 function loadHome() {
     //Carga peliculas por popularidad por default
     axios.get('https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=1')
@@ -99,7 +100,7 @@ function loadHome() {
         })
         .catch(error => console.error(error))
     //Mostrar carousel
-    document.querySelector('.divCarousel').style.display="block";
+    document.querySelector('.divCarousel').style.display = "block";
     document.querySelector('.divCarousel').style.backgroundColor = "#98ccd3";
 }
 
@@ -112,10 +113,10 @@ searchInput.addEventListener("input", function (event) {
 
 searchInput.addEventListener("keyup", function (event) {
     busqueda = event.target.value;
-    document.querySelector('.whatAreWeSeeing').innerHTML = `Películas que contienen en el título "${busqueda}"`;
     axios.get('https://api.themoviedb.org/3/search/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&query=' + busqueda)
         .then(res => {
-            document.querySelector('.divCarousel').style.display="none";
+            document.querySelector('.whatAreWeSeeing').innerHTML = `Películas que contienen en el título "${busqueda}"`;
+            document.querySelector('.divCarousel').style.display = "none";
             document.querySelector('.divCarousel').style.backgroundColor = "transparent";
             const peliculas = res.data.results;
             if (peliculas.length > 0) {
@@ -142,7 +143,7 @@ function getMovieById(event, movieId) {
             const pelicula = res.data;
 
             let generos = '';
-            if (pelicula.genres.length>0) {
+            if (pelicula.genres.length > 0) {
                 generos = 'Géneros: ';
                 pelicula.genres.forEach(genre => {
                     generos += genre.name + ", "
@@ -150,15 +151,17 @@ function getMovieById(event, movieId) {
                 generos = generos.substring(0, generos.length - 2);
             }
             let actores = '';
-            if (pelicula.credits.cast.length>0) {
+            if (pelicula.credits.cast.length > 0) {
                 actores = 'Actores: ';
-                for (let i = 0; i < 10; i++) {
-                    actores += pelicula.credits.cast[i].name + ", "
-                }
+                let i = 0;
+                pelicula.credits.cast.forEach(actor => {
+                    if (i < 10) {
+                        actores += actor.name + ", "
+                        i++;
+                    }
+                })
                 actores = actores.substring(0, actores.length - 2);
             }
-            
-
             showModal(pelicula, generos, actores);
         })
         .catch(error => console.error(error))
@@ -168,7 +171,7 @@ function getMoviesByGenre(genreName, genreId) {
     axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&with_genres=${genreId}`)
         .then(res => {
             const peliculas = res.data.results;
-            document.querySelector('.divCarousel').style.display="none";
+            document.querySelector('.divCarousel').style.display = "none";
             document.querySelector('.divCarousel').style.backgroundColor = "transparent";
             document.querySelector('.whatAreWeSeeing').innerHTML = `Género: ${genreName}`;
             if (peliculas.length > 0) {
@@ -194,11 +197,11 @@ function getSimilarMovies(movieId, movieName) {
         .then(res => {
             const peliculas = res.data.results;
             document.querySelector('.divMovies').innerHTML = '';
-            document.querySelector('.divCarousel').style.display="none";
+            document.querySelector('.divCarousel').style.display = "none";
             document.querySelector('.divCarousel').style.backgroundColor = "transparent";
             if (peliculas.length > 0) {
                 peliculas.forEach(pelicula => {
-                        document.querySelector('.divMovies').innerHTML += `
+                    document.querySelector('.divMovies').innerHTML += `
                         <div class="card" id=${pelicula.id}>
                             <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg'
                                 :"http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-top" alt="..." 
