@@ -8,7 +8,7 @@ if (document.querySelector('.listaGeneros').innerHTML === "") {
             const generos = res.data.genres;
             generos.forEach(genero => {
                 document.querySelector('.listaGeneros').innerHTML += ` 
-                <a class="dropdown-item" href="#generos" id=${genero.id} 
+                <a class="dropdown-item" href="#" id=${genero.id} 
                 onclick="getMoviesByGenre('${genero.name}', ${genero.id})">${genero.name}</a>`;
             })
         })
@@ -32,35 +32,35 @@ if (document.querySelector('.divCarousel').innerHTML === "") {
                     <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
                 </ol>
                 <div class="carousel-inner">
-                    <div class="carousel-item active" id=${peliculas[0].id}> 
+                    <div class="carousel-item active" id=${peliculas[0].id} onclick="getMovieById(event, ${peliculas[0].id})"> 
                         <img class="d-block m-100 mw-100" src="http://image.tmdb.org/t/p/w780/${peliculas[0].backdrop_path}" alt="First slide">
                         <div class="carousel-caption d-none d-md-block">
                             <h5>${peliculas[0].title}</h5>
                             <p>${peliculas[0].overview}</p>
                         </div>
                     </div>
-                    <div class="carousel-item" id=${peliculas[1].id}>
+                    <div class="carousel-item" id=${peliculas[1].id} onclick="getMovieById(event, ${peliculas[1].id})">
                         <img class="d-block m-100 mw-100" src="http://image.tmdb.org/t/p/w780/${peliculas[1].backdrop_path}" alt="Second slide">
                         <div class="carousel-caption d-none d-md-block">
                             <h5>${peliculas[1].title}</h5>
                             <p>${peliculas[1].overview}</p>
                         </div>
                     </div>
-                    <div class="carousel-item" id=${peliculas[2].id}>
+                    <div class="carousel-item" id=${peliculas[2].id} onclick="getMovieById(event, ${peliculas[2].id})">
                         <img class="d-block m-100 mw-100" src="http://image.tmdb.org/t/p/w780/${peliculas[2].backdrop_path}" alt="Third slide">
                         <div class="carousel-caption d-none d-md-block">
                             <h5>${peliculas[2].title}</h5>
                             <p>${peliculas[2].overview}</p>
                         </div>
                     </div>
-                    <div class="carousel-item" id=${peliculas[3].id}>
+                    <div class="carousel-item" id=${peliculas[3].id} onclick="getMovieById(event, ${peliculas[3].id})">
                         <img class="d-block m-100 mw-100" src="http://image.tmdb.org/t/p/w780/${peliculas[3].backdrop_path}" alt="Third slide">
                         <div class="carousel-caption d-none d-md-block">
                             <h5>${peliculas[3].title}</h5>
                             <p>${peliculas[3].overview}</p>
                         </div>
                     </div>
-                    <div class="carousel-item" id=${peliculas[4].id}>
+                    <div class="carousel-item" id=${peliculas[4].id} onclick="getMovieById(event, ${peliculas[4].id})">
                         <img class="d-block m-100 mw-100" src="http://image.tmdb.org/t/p/w780/${peliculas[4].backdrop_path}" alt="Third slide">
                         <div class="carousel-caption d-none d-md-block">
                             <h5>${peliculas[4].title}</h5>
@@ -77,29 +77,13 @@ if (document.querySelector('.divCarousel').innerHTML === "") {
         })
         .catch(error => console.error(error))
 }
-
-/*if (window.location.hash === '#generos') {
-    main.innerHTML = `HOLAAAAAAAAAA`;*/
-    /*} else if (window.location.hash === '#tecnologias') {
-        main.innerHTML = Tecnologias;
-    } else if (window.location.hash === '#contacto') {
-        main.innerHTML = Contacto;
-        document.getElementById('aceptar').addEventListener('click', clickAceptar);*/
-/*} else {*/
-    loadHome();
-    //document.querySelector('.divCarousel').style.display="none";
-    //document.querySelector('.divCarousel').style.backgroundColor = "transparent";
-/*}*/
-
+loadHome();
 function loadHome() {
-    //Mostrar carousel
     //Carga peliculas por popularidad por default
     axios.get('https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=1')
         .then(res => {
             const peliculas = res.data.results;
             document.querySelector('.divMovies').innerHTML = '';
-            document.querySelector('.divCarousel').style.display="block";
-            document.querySelector('.divCarousel').style.backgroundColor = "#98ccd3";
             document.querySelector('.whatAreWeSeeing').innerHTML = `Películas más populares`;
             peliculas.forEach(pelicula => {
                 if (!moviesInCarouselId.includes(pelicula.id)) {
@@ -114,18 +98,25 @@ function loadHome() {
             })
         })
         .catch(error => console.error(error))
+    //Mostrar carousel
+    document.querySelector('.divCarousel').style.display="block";
+    document.querySelector('.divCarousel').style.backgroundColor = "#98ccd3";
 }
 
 searchInput.addEventListener("input", function (event) {
     if ('' == this.value) {
         document.querySelector('.divMovies').innerHTML = '';
+        loadHome();
     }
 })
 
 searchInput.addEventListener("keyup", function (event) {
     busqueda = event.target.value;
+    document.querySelector('.whatAreWeSeeing').innerHTML = `Películas que contienen en el título "${busqueda}"`;
     axios.get('https://api.themoviedb.org/3/search/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&query=' + busqueda)
         .then(res => {
+            document.querySelector('.divCarousel').style.display="none";
+            document.querySelector('.divCarousel').style.backgroundColor = "transparent";
             const peliculas = res.data.results;
             if (peliculas.length > 0) {
                 document.querySelector('.divMovies').innerHTML = '';
@@ -151,16 +142,22 @@ function getMovieById(event, movieId) {
             const pelicula = res.data;
 
             let generos = '';
-            pelicula.genres.forEach(genre => {
-                generos += genre.name + ", "
-            });
-            generos = generos.substring(0, generos.length - 2);
-
-            let actores = '';
-            for (let i = 0; i < 10; i++) {
-                actores += pelicula.credits.cast[i].name + ", "
+            if (pelicula.genres.length>0) {
+                generos = 'Géneros: ';
+                pelicula.genres.forEach(genre => {
+                    generos += genre.name + ", "
+                });
+                generos = generos.substring(0, generos.length - 2);
             }
-            actores = actores.substring(0, actores.length - 2);
+            let actores = '';
+            if (pelicula.credits.cast.length>0) {
+                actores = 'Actores: ';
+                for (let i = 0; i < 10; i++) {
+                    actores += pelicula.credits.cast[i].name + ", "
+                }
+                actores = actores.substring(0, actores.length - 2);
+            }
+            
 
             showModal(pelicula, generos, actores);
         })
@@ -199,7 +196,7 @@ function showModal(pelicula, generos, actores) {
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="movieTitle">${pelicula.title}</h5>
+                        <h5 class="modal-title" id="movieTitle">${pelicula.title} (${pelicula.release_date.slice(0,4)})</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -209,15 +206,9 @@ function showModal(pelicula, generos, actores) {
                         <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg':
                             "http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-left" alt="...">
                         <div class="modalInfo">
-                            <div>
-                                ${pelicula.overview}
-                            </div><br>
-                            <div>
-                                Géneros: ${generos}
-                            </div><br>
-                            <div>
-                                Actores: ${actores}
-                            </div>
+                            <div>${pelicula.overview}</div><br>
+                            <div>${generos}</div><br>
+                            <div>${actores}</div>
                         </div>
                     </div>
                     <div class="modal-footer">
