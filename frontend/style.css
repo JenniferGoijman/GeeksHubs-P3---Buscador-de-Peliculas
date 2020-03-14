@@ -74,8 +74,14 @@ li {
 }
 
 .whatAreWeSeeing {
-    margin: 10px 0 0 7.5%;
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 7.5% 0 7.5%;
     color: #132238;
+}
+
+select {
+    visibility: hidden;
 }
 
 .divMovies {

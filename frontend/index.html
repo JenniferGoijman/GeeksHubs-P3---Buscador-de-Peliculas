@@ -44,7 +44,16 @@
     <div class="divCarousel"></div>
 
     <div class="divModal"></div>
-    <h4 class="whatAreWeSeeing"></h4>
+
+    <div class="whatAreWeSeeing">
+        <h4></h4>
+        <select id="mySelect" onChange="filterMoviesByGenreAndSelectedOption(this)">
+            <option value="value1" selected>Ordenar por más votadas</option> 
+            <option value="value2">Ordenar por más recientes</option>
+            <option value="value3">Ordernar A-Z</option>
+            <option value="value3">Ordernar Z-A</option>
+      </select>
+    </div>
     
     <div class="divMovies"></div>
 
