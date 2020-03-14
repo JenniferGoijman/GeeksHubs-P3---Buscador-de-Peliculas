@@ -14,6 +14,14 @@ nav {
     background-color: #98ccd3;
 }
 
+.navbar-light .navbar-nav .nav-link {
+    color: #132238;
+}
+
+.nav-link:hover {
+    opacity: 0.75;
+}
+
 div#navbarTogglerDemo02.collapse.navbar-collapse {
     margin-left: 25px;
 }
@@ -35,8 +43,12 @@ li {
 .divCarousel {
     margin: 0 10%;
     max-height: 460px;
-    padding: 0 10px 10px 10px;;
+    padding: 0 10px 10px 10px;
     border-radius: 0 0 10px 10px;
+}
+
+.divCarousel:hover {
+    cursor: pointer;
 }
 
 .carousel-item img {
@@ -63,7 +75,8 @@ li {
 }
 
 .whatAreWeSeeing {
-    margin: 10px 0 0 7.5%;    
+    margin: 10px 0 0 7.5%;
+    color: #132238;
 }
 
 .divMovies {
@@ -72,6 +85,10 @@ li {
     margin-top: 0.9em;
     grid-gap: 10px;
     justify-content: center;
+}
+
+.card:hover {
+    cursor: pointer;
 }
 
 .card {
@@ -109,8 +126,12 @@ li {
 }
 
 .modalInfo {
-    padding: 10px;
+    padding: 0 10px;
     font-size: 15px;
+}
+
+.btn {
+    margin-left: 25px;
 }
 
 @media (max-width: 576px) {
@@ -118,12 +139,12 @@ li {
         margin: 0;
         padding: 0;
         border-radius: 0;
+        background-color: transparent;
     }
 
     .carousel-item img {
         border-radius: 0;
     }
-    
 
     .divMovies {
         grid-template-columns: repeat(auto-fill, 126px);

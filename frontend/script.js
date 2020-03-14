@@ -189,6 +189,33 @@ function getMoviesByGenre(genreName, genreId) {
         .catch(error => console.error(error))
 }
 
+function getSimilarMovies(movieId, movieName) {
+    axios.get(`https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&page=1`)
+        .then(res => {
+            const peliculas = res.data.results;
+            document.querySelector('.divMovies').innerHTML = '';
+            document.querySelector('.divCarousel').style.display="none";
+            document.querySelector('.divCarousel').style.backgroundColor = "transparent";
+            if (peliculas.length > 0) {
+                peliculas.forEach(pelicula => {
+                        document.querySelector('.divMovies').innerHTML += `
+                        <div class="card" id=${pelicula.id}>
+                            <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg'
+                                :"http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-top" alt="..." 
+                                onclick="getMovieById(event, ${pelicula.id})">
+                            <div class="card-body">
+                                <h6 class="card-title">${pelicula.title}</h6>
+                            </div>
+                        </div>`
+                });
+                document.querySelector('.whatAreWeSeeing').innerHTML = `Películas similares a "${movieName}"`;
+            } else {
+                document.querySelector('.whatAreWeSeeing').innerHTML = `No se encontraron películas similares a "${movieName}"`;
+            }
+        })
+        .catch(error => console.error(error))
+}
+
 function showModal(pelicula, generos, actores) {
     document.querySelector('.divModal').innerHTML = `
     <div class="modal fade" id="moviesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -212,7 +239,9 @@ function showModal(pelicula, generos, actores) {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        ¿Ya viste esta película y te encantó?   
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" 
+                        onclick="getSimilarMovies(${pelicula.id}, '${pelicula.title}')">Ver similares</button>
                     </div>
                 </div>
             </div>
