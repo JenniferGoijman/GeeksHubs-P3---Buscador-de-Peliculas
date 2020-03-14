@@ -1,95 +1,120 @@
 const searchInput = document.querySelector('input.form-control.mr-sm-2')
+const main = document.querySelector('main');
+
+//Carga generos en dropdown por default
+if (document.querySelector('.listaGeneros').innerHTML === "") {
+    axios.get('https://api.themoviedb.org/3/genre/movie/list?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES')
+        .then(res => {
+            const generos = res.data.genres;
+            generos.forEach(genero => {
+                document.querySelector('.listaGeneros').innerHTML += ` 
+                <a class="dropdown-item" href="#generos" id=${genero.id} 
+                onclick="getMoviesByGenre('${genero.name}', ${genero.id})">${genero.name}</a>`;
+            })
+        })
+        .catch(error => console.error(error))
+}
 
 //Carga carrousel con top 5 de popularidad
-let carousel = '';
 let moviesInCarouselId = [];
-axios.get('https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=1')
-    .then(res => {
-        const peliculas = res.data.results;
-        document.querySelector('.divCarousel').innerHTML = `
-            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-            <ol class="carousel-indicators">
-                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
-            </ol>
-            <div class="carousel-inner">
-                <div class="carousel-item active" id=${peliculas[0].id}> 
-                    <img class="d-block m-100 mw-100" src="http://image.tmdb.org/t/p/w780/${peliculas[0].backdrop_path}" alt="First slide">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>${peliculas[0].title}</h5>
-                        <p>${peliculas[0].overview}</p>
+if (document.querySelector('.divCarousel').innerHTML === "") {
+    let carousel = '';
+    axios.get('https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=1')
+        .then(res => {
+            const peliculas = res.data.results;
+            document.querySelector('.divCarousel').innerHTML = `
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active" id=${peliculas[0].id}> 
+                        <img class="d-block m-100 mw-100" src="http://image.tmdb.org/t/p/w780/${peliculas[0].backdrop_path}" alt="First slide">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>${peliculas[0].title}</h5>
+                            <p>${peliculas[0].overview}</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" id=${peliculas[1].id}>
+                        <img class="d-block m-100 mw-100" src="http://image.tmdb.org/t/p/w780/${peliculas[1].backdrop_path}" alt="Second slide">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>${peliculas[1].title}</h5>
+                            <p>${peliculas[1].overview}</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" id=${peliculas[2].id}>
+                        <img class="d-block m-100 mw-100" src="http://image.tmdb.org/t/p/w780/${peliculas[2].backdrop_path}" alt="Third slide">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>${peliculas[2].title}</h5>
+                            <p>${peliculas[2].overview}</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" id=${peliculas[3].id}>
+                        <img class="d-block m-100 mw-100" src="http://image.tmdb.org/t/p/w780/${peliculas[3].backdrop_path}" alt="Third slide">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>${peliculas[3].title}</h5>
+                            <p>${peliculas[3].overview}</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" id=${peliculas[4].id}>
+                        <img class="d-block m-100 mw-100" src="http://image.tmdb.org/t/p/w780/${peliculas[4].backdrop_path}" alt="Third slide">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>${peliculas[4].title}</h5>
+                            <p>${peliculas[4].overview}</p>
+                        </div>
                     </div>
                 </div>
-                <div class="carousel-item" id=${peliculas[1].id}>
-                    <img class="d-block m-100 mw-100" src="http://image.tmdb.org/t/p/w780/${peliculas[1].backdrop_path}" alt="Second slide">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>${peliculas[1].title}</h5>
-                        <p>${peliculas[1].overview}</p>
-                    </div>
-                </div>
-                <div class="carousel-item" id=${peliculas[2].id}>
-                    <img class="d-block m-100 mw-100" src="http://image.tmdb.org/t/p/w780/${peliculas[2].backdrop_path}" alt="Third slide">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>${peliculas[2].title}</h5>
-                        <p>${peliculas[2].overview}</p>
-                    </div>
-                </div>
-                <div class="carousel-item" id=${peliculas[3].id}>
-                    <img class="d-block m-100 mw-100" src="http://image.tmdb.org/t/p/w780/${peliculas[3].backdrop_path}" alt="Third slide">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>${peliculas[3].title}</h5>
-                        <p>${peliculas[3].overview}</p>
-                    </div>
-                </div>
-                <div class="carousel-item" id=${peliculas[4].id}>
-                    <img class="d-block m-100 mw-100" src="http://image.tmdb.org/t/p/w780/${peliculas[4].backdrop_path}" alt="Third slide">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>${peliculas[4].title}</h5>
-                        <p>${peliculas[4].overview}</p>
-                    </div>
-                </div>
-            </div>
-        </div>`;
-        moviesInCarouselId.push(peliculas[0].id);
-        moviesInCarouselId.push(peliculas[1].id);
-        moviesInCarouselId.push(peliculas[2].id);
-        moviesInCarouselId.push(peliculas[3].id);
-        moviesInCarouselId.push(peliculas[4].id);
-    })
-    .catch(error => console.error(error))
+            </div>`;
+            moviesInCarouselId.push(peliculas[0].id);
+            moviesInCarouselId.push(peliculas[1].id);
+            moviesInCarouselId.push(peliculas[2].id);
+            moviesInCarouselId.push(peliculas[3].id);
+            moviesInCarouselId.push(peliculas[4].id);
+        })
+        .catch(error => console.error(error))
+}
 
-//Carga peliculas por popularidad por default
-axios.get('https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=1')
-    .then(res => {
-        const peliculas = res.data.results;
-        peliculas.forEach(pelicula => {
-            if (!moviesInCarouselId.includes(pelicula.id)) {
-                document.querySelector('.divMovies').innerHTML += `
+/*if (window.location.hash === '#generos') {
+    main.innerHTML = `HOLAAAAAAAAAA`;*/
+    /*} else if (window.location.hash === '#tecnologias') {
+        main.innerHTML = Tecnologias;
+    } else if (window.location.hash === '#contacto') {
+        main.innerHTML = Contacto;
+        document.getElementById('aceptar').addEventListener('click', clickAceptar);*/
+/*} else {*/
+    loadHome();
+    //document.querySelector('.divCarousel').style.display="none";
+    //document.querySelector('.divCarousel').style.backgroundColor = "transparent";
+/*}*/
+
+function loadHome() {
+    //Mostrar carousel
+    //Carga peliculas por popularidad por default
+    axios.get('https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=1')
+        .then(res => {
+            const peliculas = res.data.results;
+            document.querySelector('.divMovies').innerHTML = '';
+            document.querySelector('.divCarousel').style.display="block";
+            document.querySelector('.divCarousel').style.backgroundColor = "#98ccd3";
+            document.querySelector('.whatAreWeSeeing').innerHTML = `Películas más populares`;
+            peliculas.forEach(pelicula => {
+                if (!moviesInCarouselId.includes(pelicula.id)) {
+                    document.querySelector('.divMovies').innerHTML += `
                 <div class="card" id=${pelicula.id}>
                     <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg':"http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-top" alt="..." onclick="getMovieById(event, ${pelicula.id})">
                     <div class="card-body">
                         <h6 class="card-title">${pelicula.title}</h6>
                     </div>
                 </div>`
-            }
+                }
+            })
         })
-    })
-    .catch(error => console.error(error))
-
-//Carga generos en dropdown por default
-axios.get('https://api.themoviedb.org/3/genre/movie/list?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES')
-    .then(res => {
-        const generos = res.data.genres;
-        generos.forEach(genero => {
-            document.querySelector('.listaGeneros').innerHTML += ` 
-            <a class="dropdown-item" href="#" id=${genero.id} 
-            onclick="getMoviesByGenre('${genero.name}', ${genero.id})">${genero.name}</a>`;
-        })
-    })
-    .catch(error => console.error(error))
+        .catch(error => console.error(error))
+}
 
 searchInput.addEventListener("input", function (event) {
     if ('' == this.value) {
@@ -146,9 +171,9 @@ function getMoviesByGenre(genreName, genreId) {
     axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&with_genres=${genreId}`)
         .then(res => {
             const peliculas = res.data.results;
-            document.querySelector('.divCarousel').innerHTML = ``;
-            document.querySelector('.divCarousel').style.backgroundColor="transparent";
-            document.querySelector('.whatAreWeSeeing').innerHTML=`Peliculas de ${genreName}`;
+            document.querySelector('.divCarousel').style.display="none";
+            document.querySelector('.divCarousel').style.backgroundColor = "transparent";
+            document.querySelector('.whatAreWeSeeing').innerHTML = `Género: ${genreName}`;
             if (peliculas.length > 0) {
                 document.querySelector('.divMovies').innerHTML = '';
                 peliculas.forEach(pelicula => {
@@ -203,8 +228,3 @@ function showModal(pelicula, generos, actores) {
         </div>`
     $('#moviesModal').modal('show');
 }
-
-
-
-//<p class="card-text">${pelicula.overview}</p>
-//<a href="#" class="btn btn-primary">Go somewhere</a>

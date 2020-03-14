@@ -35,8 +35,7 @@ li {
 .divCarousel {
     margin: 0 10%;
     max-height: 460px;
-    padding: 0 10px 10px 10px;
-    background-color: #98ccd3;
+    padding: 0 10px 10px 10px;;
     border-radius: 0 0 10px 10px;
 }
 
