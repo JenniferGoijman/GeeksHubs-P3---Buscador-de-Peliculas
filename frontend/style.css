@@ -63,10 +63,14 @@ li {
     max-height: 90%;
 }
 
+.whatAreWeSeeing {
+    margin: 10px 0 0 7.5%;    
+}
+
 .divMovies {
     display: grid;
     grid-template-columns: repeat(auto-fill, 160px);
-    margin-top: 1em;
+    margin-top: 0.9em;
     grid-gap: 10px;
     justify-content: center;
 }
