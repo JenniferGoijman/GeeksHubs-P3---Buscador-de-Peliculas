@@ -33,8 +33,34 @@ li {
 }
 
 .divCarousel {
-    display: flex;
-    justify-content: center;
+    margin: 0 10%;
+    max-height: 460px;
+    padding: 0 10px 10px 10px;
+    background-color: #98ccd3;
+    border-radius: 0 0 10px 10px;
+}
+
+.carousel-item img {
+    width: 100%;
+    max-height: 375px;
+    border-radius: 0 0 10px 10px;
+}
+
+.carousel-caption {
+    background-color: #364e68;
+    opacity: 0.75;
+    border-radius: 10px;
+    border: 1px solid #ebf0f6;
+    padding: 10px;
+    max-width: 27%;
+    top: 5%;
+    left: 1%;
+}
+
+.carousel-caption p {
+    font-size: 0.80em;
+    overflow: hidden;
+    max-height: 90%;
 }
 
 .divMovies {

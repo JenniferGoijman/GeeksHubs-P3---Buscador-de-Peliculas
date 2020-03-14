@@ -44,6 +44,8 @@ axios.get('https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac67
                 <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
                 <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
                 <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
             </ol>
             <div class="carousel-inner">
                 <div class="carousel-item active" id=${peliculas[0].id}> 
@@ -67,17 +69,23 @@ axios.get('https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac67
                         <p>${peliculas[2].overview}</p>
                     </div>
                 </div>
+                <div class="carousel-item" id=${peliculas[3].id}>
+                    <img class="d-block m-100 mw-100" src="http://image.tmdb.org/t/p/w780/${peliculas[3].backdrop_path}" alt="Third slide">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>${peliculas[3].title}</h5>
+                        <p>${peliculas[3].overview}</p>
+                    </div>
+                </div>
+                <div class="carousel-item" id=${peliculas[4].id}>
+                    <img class="d-block m-100 mw-100" src="http://image.tmdb.org/t/p/w780/${peliculas[4].backdrop_path}" alt="Third slide">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>${peliculas[4].title}</h5>
+                        <p>${peliculas[4].overview}</p>
+                    </div>
+                </div>
             </div>
-            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
         </div>`
-                
+
     })
     .catch(error => console.error(error))
 
