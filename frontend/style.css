@@ -10,7 +10,7 @@ body {
     font-size: 18px;
 }
 
-nav {
+header {
     background-color: #98ccd3;
 }
 
@@ -70,7 +70,7 @@ li {
 .carousel-caption p {
     font-size: 0.80em;
     overflow: hidden;
-    max-height: 85px;    
+    max-height: 85px;
 }
 
 .whatAreWeSeeing {
@@ -145,28 +145,39 @@ select {
     position: relative;
     font-family: FontAwesome;
     margin-left: 10px;
-  }
-  
-  .stars-outer::before {
+}
+
+.stars-outer::before {
     content: "\f006 \f006 \f006 \f006 \f006";
-  }
-  
-  .stars-inner {
+}
+
+.stars-inner {
     position: absolute;
     top: 0;
     left: 0;
     white-space: nowrap;
     overflow: hidden;
     width: 0;
-  }
-  
-  .stars-inner::before {
+}
+
+.stars-inner::before {
     content: "\f005 \f005 \f005 \f005 \f005";
     color: #f8ce0b;
-  }
+}
 
 .btn {
     margin-left: 25px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.page-link {
+    background-color: #364e68;
+    color: #ebf0f6;
 }
 
 @media (max-width: 576px) {
@@ -226,4 +237,4 @@ select {
     .modal-dialog {
         max-width: 800px;
     }
-}  
+}
