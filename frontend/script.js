@@ -17,8 +17,7 @@ const changePage = (step) => {
     } else if (mode.includes("genre")) {
         filterMoviesByGenreAndSelectedOption(document.getElementById("mySelect"));
     }
-    document.querySelector('.divCarousel').style.display = "none";
-    document.querySelector('.divCarousel').style.backgroundColor = "transparent";        
+    hideCarousel();
 }
 
 if (document.querySelector('.listaGeneros').innerHTML === "") {
@@ -90,34 +89,29 @@ if (document.querySelector('.divCarousel').innerHTML === "") {
         .catch(error => console.error(error))
 }
 
+function visibilityPrevPage() {
+    if (page === 1) {
+        document.querySelector('#prevPage').style.visibility = "hidden";
+    } else {
+        document.querySelector('#prevPage').style.visibility = "visible";
+    }
+}
+
+function hideCarousel () {
+    document.querySelector('.divCarousel').style.display = "none";
+    document.querySelector('.divCarousel').style.backgroundColor = "transparent";
+}
+
 function getPopularMovies(page = 1) {
     if (mode !== "popular") {
         page = 1;
         document.querySelector('.currentPage').innerText = page;
     }
     mode = "popular";
-    if (page === 1) {
-        document.querySelector('#prevPage').style.visibility = "hidden";
-    } else {
-        document.querySelector('#prevPage').style.visibility = "visible";
-    }
-    //Carga peliculas por popularidad por default
-    axios.get('https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=' + page)
-        .then(res => {
-            const peliculas = res.data.results;
-            document.querySelector('.divMovies').innerHTML = '';
-            document.querySelector('.whatAreWeSeeing h4').innerHTML = `Películas más populares`;
-            peliculas.forEach(pelicula => {
-                document.querySelector('.divMovies').innerHTML += `
-                <div class="card" id=${pelicula.id}>
-                    <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg':"http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-top" alt="..." onclick="getMovieById(event, ${pelicula.id})">
-                    <div class="card-body">
-                        <h6 class="card-title">${pelicula.title}</h6>
-                    </div>
-                </div>`;
-            })
-        })
-        .catch(error => console.error(error))
+    visibilityPrevPage();
+    document.querySelector('.whatAreWeSeeing select').style.visibility = 'hidden';
+    document.querySelector('.whatAreWeSeeing h4').innerHTML = `Películas más populares`;
+    getMovies('https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=' + page);
     //Mostrar carousel
     document.querySelector('.divCarousel').style.display = "block";
     document.querySelector('.divCarousel').style.backgroundColor = "#98ccd3";
@@ -132,11 +126,7 @@ searchInput.addEventListener("input", function (event) {
 
 const getMoviesByQuery = () => {
     document.querySelector('.currentPage').innerText = page;
-    if (page === 1) {
-        document.querySelector('#prevPage').style.visibility = "hidden";
-    } else {
-        document.querySelector('#prevPage').style.visibility = "visible";
-    }
+    visibilityPrevPage();
     document.querySelector('.whatAreWeSeeing h4').innerHTML = `Películas que contienen en el título "${busqueda}"`;
     getMovies (`https://api.themoviedb.org/3/search/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&query=${busqueda}&page=${page}`);
 }
@@ -145,6 +135,7 @@ searchInput.addEventListener("keyup", function (event) {
     busqueda = event.target.value;
     mode = "search";
     page = 1;
+    hideCarousel ();
     getMoviesByQuery()
 })
 
@@ -186,11 +177,7 @@ function getSimilarMovies(movieId, movieName) {
         document.querySelector('.whatAreWeSeeing h4').id = `${movieId}`;
     }
     mode = "similar"+movieId;
-    if (page === 1) {
-        document.querySelector('#prevPage').style.visibility = "hidden";
-    } else {
-        document.querySelector('#prevPage').style.visibility = "visible";
-    }
+    visibilityPrevPage();
     getMovies(`https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&page=${page}`);
 }
 
@@ -250,11 +237,7 @@ function filterMoviesByGenreAndSelectedOption(element) {
         document.querySelector('.currentPage').innerText = page;
     }
     mode = element.selectedIndex+"genre"+genreId;
-    if (page === 1) {
-        document.querySelector('#prevPage').style.visibility = "hidden";
-    } else {
-        document.querySelector('#prevPage').style.visibility = "visible";
-    }
+    visibilityPrevPage();
 
     if (element.selectedIndex === 0) {
         getMovies(`https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=vote_average.desc&include_adult=false&page=${page}&vote_count.gte=100&with_genres=${genreId}`)
@@ -276,8 +259,6 @@ function getMovies (url) {
 function injectInDivMovies (peliculasData) {
     let totalPages = peliculasData.total_pages;
     const peliculas = peliculasData.results;
-    document.querySelector('.divCarousel').style.display = "none";
-    document.querySelector('.divCarousel').style.backgroundColor = "transparent";
     if (peliculas.length > 0) {
         document.querySelector('.divMovies').innerHTML = '';
         peliculas.forEach(pelicula => {
