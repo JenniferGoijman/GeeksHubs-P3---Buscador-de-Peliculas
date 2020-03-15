@@ -202,6 +202,9 @@ function showModal(pelicula, generos, actores) {
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="movieTitle">${pelicula.title} (${pelicula.release_date.slice(0,4)})</h5>
+                        <div class="stars-outer">
+                            <div class="stars-inner"></div>
+                        </div>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -223,7 +226,8 @@ function showModal(pelicula, generos, actores) {
                     </div>
                 </div>
             </div>
-        </div>`
+        </div>`;
+    document.querySelector(`.stars-inner`).style.width = `${(Math.round(pelicula.vote_average)*10)}%`; 
     $('#moviesModal').modal('show');
 }
 
