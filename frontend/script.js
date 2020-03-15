@@ -12,12 +12,15 @@ const changePage = (step) => {
         getPopularMovies(page);
     } else if (mode === "search") {
         getMoviesByQuery();
+    } else if (mode.includes("similar")) {
+        getSimilarMovies(document.querySelector('.whatAreWeSeeing h4').id);
     } else if (mode.includes("genre")) {
         filterMoviesByGenreAndSelectedOption(document.getElementById("mySelect"));
     }
+    document.querySelector('.divCarousel').style.display = "none";
+    document.querySelector('.divCarousel').style.backgroundColor = "transparent";        
 }
 
-//Carga generos en dropdown por default
 if (document.querySelector('.listaGeneros').innerHTML === "") {
     axios.get('https://api.themoviedb.org/3/genre/movie/list?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES')
         .then(res => {
@@ -31,7 +34,6 @@ if (document.querySelector('.listaGeneros').innerHTML === "") {
         .catch(error => console.error(error))
 }
 
-//Carga carrousel con top 5 de popularidad
 if (document.querySelector('.divCarousel').innerHTML === "") {
     let carousel = '';
     axios.get('https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=1')
@@ -135,34 +137,8 @@ const getMoviesByQuery = () => {
     } else {
         document.querySelector('#prevPage').style.visibility = "visible";
     }
-    axios.get(`https://api.themoviedb.org/3/search/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&query=${busqueda}&pag33e=${page}`)
-        .then(res => {
-            let totalPages = res.data.total_pages;
-            document.querySelector('.whatAreWeSeeing h4').innerHTML = `Películas que contienen en el título "${busqueda}"`;
-            document.querySelector('.divCarousel').style.display = "none";
-            document.querySelector('.divCarousel').style.backgroundColor = "transparent";
-            const peliculas = res.data.results;
-            if (peliculas.length > 0) {
-                document.querySelector('.divMovies').innerHTML = '';
-                peliculas.forEach(pelicula => {
-                    document.querySelector('.divMovies').innerHTML += `
-                <div class="card" id=${pelicula.id}>
-                <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg':"http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-top" alt="..." onclick="getMovieById(event, ${pelicula.id})">
-                <div class="card-body">
-                <h6 class="card-title">${pelicula.title}</h6>
-                </div>
-                </div>`;
-                })
-            } else {
-                document.querySelector('.divMovies').innerHTML = '';
-            }
-            if (page === totalPages) {
-                document.querySelector('#nextPage').style.visibility = "hidden";
-            } else {
-                document.querySelector('#nextPage').style.visibility = "visible";
-            }
-        })
-        .catch(error => console.error(error))
+    document.querySelector('.whatAreWeSeeing h4').innerHTML = `Películas que contienen en el título "${busqueda}"`;
+    getMovies (`https://api.themoviedb.org/3/search/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&query=${busqueda}&page=${page}`);
 }
 
 searchInput.addEventListener("keyup", function (event) {
@@ -203,30 +179,19 @@ function getMovieById(event, movieId) {
 }
 
 function getSimilarMovies(movieId, movieName) {
-    axios.get(`https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&page=1`)
-        .then(res => {
-            const peliculas = res.data.results;
-            document.querySelector('.divMovies').innerHTML = '';
-            document.querySelector('.divCarousel').style.display = "none";
-            document.querySelector('.divCarousel').style.backgroundColor = "transparent";
-            if (peliculas.length > 0) {
-                peliculas.forEach(pelicula => {
-                    document.querySelector('.divMovies').innerHTML += `
-                        <div class="card" id=${pelicula.id}>
-                            <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg'
-                                :"http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-top" alt="..." 
-                                onclick="getMovieById(event, ${pelicula.id})">
-                            <div class="card-body">
-                                <h6 class="card-title">${pelicula.title}</h6>
-                            </div>
-                        </div>`
-                });
-                document.querySelector('.whatAreWeSeeing h4').innerHTML = `Películas similares a "${movieName}"`;
-            } else {
-                document.querySelector('.whatAreWeSeeing h4').innerHTML = `No se encontraron películas similares a "${movieName}"`;
-            }
-        })
-        .catch(error => console.error(error))
+    if (mode !== "similar"+movieId) {
+        page = 1;
+        document.querySelector('.currentPage').innerText = page;
+        document.querySelector('.whatAreWeSeeing h4').innerHTML = `Películas similares a "${movieName}"`;
+        document.querySelector('.whatAreWeSeeing h4').id = `${movieId}`;
+    }
+    mode = "similar"+movieId;
+    if (page === 1) {
+        document.querySelector('#prevPage').style.visibility = "hidden";
+    } else {
+        document.querySelector('#prevPage').style.visibility = "visible";
+    }
+    getMovies(`https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&page=${page}`);
 }
 
 function showModal(pelicula, generos, actores) {
@@ -292,43 +257,46 @@ function filterMoviesByGenreAndSelectedOption(element) {
     }
 
     if (element.selectedIndex === 0) {
-        getMoviesByGenreAndSelect(`https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=vote_average.desc&include_adult=false&page=${page}&vote_count.gte=100&with_genres=${genreId}`)
+        getMovies(`https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=vote_average.desc&include_adult=false&page=${page}&vote_count.gte=100&with_genres=${genreId}`)
     } else if (element.selectedIndex === 1) {
-        getMoviesByGenreAndSelect(`https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=release_date.desc&include_adult=false&page=${page}&vote_count.gte=100&release_date.gte=2019&with_genres=${genreId}`)
+        getMovies(`https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=release_date.desc&include_adult=false&page=${page}&vote_count.gte=100&release_date.gte=2019&with_genres=${genreId}`)
     } else if (element.selectedIndex === 2) {
-        getMoviesByGenreAndSelect(`https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=original_title.asc&include_adult=false&page=${page}&vote_count.gte=100&with_genres=${genreId}`)
+        getMovies(`https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=original_title.asc&include_adult=false&page=${page}&vote_count.gte=100&with_genres=${genreId}`)
     } else if (element.selectedIndex === 3) {
-        getMoviesByGenreAndSelect(`https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=original_title.desc&include_adult=false&page=${page}&vote_count.gte=100&with_genres=${genreId}`)
+        getMovies(`https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=original_title.desc&include_adult=false&page=${page}&vote_count.gte=100&with_genres=${genreId}`)
     }
 }
 
-function getMoviesByGenreAndSelect (url) {
+function getMovies (url) {
     axios.get(url)
-        .then(res => {
-            let totalPages = peliculasData.total_pages;
-            const peliculas = peliculasData.results;
-            document.querySelector('.divCarousel').style.display = "none";
-            document.querySelector('.divCarousel').style.backgroundColor = "transparent";
-            if (peliculas.length > 0) {
-                document.querySelector('.divMovies').innerHTML = '';
-                peliculas.forEach(pelicula => {
-                    document.querySelector('.divMovies').innerHTML += `
-                    <div class="card" id=${pelicula.id}>
-                    <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg'
-                    :"http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-top" alt="..." onclick="getMovieById(event, ${pelicula.id})">
-                    <div class="card-body">
-                    <h6 class="card-title">${pelicula.title}</h6>
-                    </div>
-                    </div>`;
-                })
-            } else {
-                document.querySelector('.divMovies').innerHTML = '';
-            }
-            if (page === totalPages) {
-                document.querySelector('#nextPage').style.visibility = "hidden";
-            } else {
-                document.querySelector('#nextPage').style.visibility = "visible";
-            }
-        })
+        .then(res => { injectInDivMovies(res.data) })
         .catch(error => console.error(error));
+}
+
+function injectInDivMovies (peliculasData) {
+    let totalPages = peliculasData.total_pages;
+    const peliculas = peliculasData.results;
+    document.querySelector('.divCarousel').style.display = "none";
+    document.querySelector('.divCarousel').style.backgroundColor = "transparent";
+    if (peliculas.length > 0) {
+        document.querySelector('.divMovies').innerHTML = '';
+        peliculas.forEach(pelicula => {
+            document.querySelector('.divMovies').innerHTML += `
+            <div class="card" id=${pelicula.id}>
+            <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg'
+            :"http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-top" alt="..." onclick="getMovieById(event, ${pelicula.id})">
+            <div class="card-body">
+            <h6 class="card-title">${pelicula.title}</h6>
+            </div>
+            </div>`;
+        })
+    } else {
+        document.querySelector('.divMovies').innerHTML = '';
+        document.querySelector('.whatAreWeSeeing h4').innerHTML = `No se encontraron películas"`;
+    }
+    if (page === totalPages) {
+        document.querySelector('#nextPage').style.visibility = "hidden";
+    } else {
+        document.querySelector('#nextPage').style.visibility = "visible";
+    }
 }
