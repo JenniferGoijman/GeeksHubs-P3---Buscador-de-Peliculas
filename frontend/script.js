@@ -10,7 +10,7 @@ if (document.querySelector('.listaGeneros').innerHTML === "") {
             generos.forEach(genero => {
                 document.querySelector('.listaGeneros').innerHTML += ` 
                 <a class="dropdown-item" href="#" id=${genero.id} 
-                onclick="getMoviesByGenre('${genero.name}', ${genero.id})">${genero.name}</a>`;
+                onclick="loadMoviesByGenre('${genero.name}', ${genero.id})">${genero.name}</a>`;
             })
         })
         .catch(error => console.error(error))
@@ -227,107 +227,80 @@ function showModal(pelicula, generos, actores) {
     $('#moviesModal').modal('show');
 }
 
-function getMoviesByGenre(genreName, genreId) {
+function loadMoviesByGenre(genreName, genreId) {
     document.querySelector('.divCarousel').style.display = "none";
     document.querySelector('.divCarousel').style.backgroundColor = "transparent";
     document.querySelector('.whatAreWeSeeing h4').innerHTML = `Género: ${genreName}`;
     document.querySelector('.whatAreWeSeeing h4').id = `${genreId}`;
     document.querySelector('.whatAreWeSeeing select').style.visibility = 'visible';
+    document.querySelector('.whatAreWeSeeing select').selectedIndex = '0';
     document.querySelector('.divMovies').innerHTML = '';
     filterMoviesByGenreAndSelectedOption(document.getElementById("mySelect"));
 }
 
 function filterMoviesByGenreAndSelectedOption(element) {
-    let genero = document.getElementById("mySelect").parentElement.firstElementChild.id;
+    let generoId = document.getElementById("mySelect").parentElement.firstElementChild.id;
     if (element.selectedIndex === 0) {
-        getMoviesByGenreAndByVoteAverage(genero);
+        getMoviesByGenreAndByVoteAverage(generoId);
     } else if (element.selectedIndex === 1) {
-        getMoviesByGenreAndByReleaseDate(genero);
+        getMoviesByGenreAndByReleaseDate(generoId);
     } else if (element.selectedIndex === 2) {
-        getMoviesByGenreAndByTitleDesc(genero);
+        getMoviesByGenreAndByTitleDesc(generoId);
     } else if (element.selectedIndex === 3) {
-        getMoviesByGenreAndByTitleAsc(genero);
+        getMoviesByGenreAndByTitleAsc(generoId);
     }
 }
-
+function injectinDivMovies (peliculas) {
+    document.querySelector('.divCarousel').style.display = "none";
+    document.querySelector('.divCarousel').style.backgroundColor = "transparent";
+    if (peliculas.length > 0) {
+        document.querySelector('.divMovies').innerHTML = '';
+        peliculas.forEach(pelicula => {
+            document.querySelector('.divMovies').innerHTML += `
+    <div class="card" id=${pelicula.id}>
+    <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg'
+    :"http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-top" alt="..." onclick="getMovieById(event, ${pelicula.id})">
+    <div class="card-body">
+    <h6 class="card-title">${pelicula.title}</h6>
+    </div>
+    </div>`;
+        })
+    } else {
+        document.querySelector('.divMovies').innerHTML = '';
+    }
+}
 function getMoviesByGenreAndByVoteAverage(genreId) {
-    axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=vote_average.desc
-    &include_adult=false&page=1&vote_count.gte=100&with_genres=${genreId}`)
+    axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=vote_average.desc&include_adult=false&page=1&vote_count.gte=100&with_genres=${genreId}`)
         .then(res => {
             const peliculas = res.data.results;
-            document.querySelector('.divCarousel').style.display = "none";
-            document.querySelector('.divCarousel').style.backgroundColor = "transparent";
-            if (peliculas.length > 0) {
-                document.querySelector('.divMovies').innerHTML = '';
-                peliculas.forEach(pelicula => {
-                    document.querySelector('.divMovies').innerHTML += `
-            <div class="card" id=${pelicula.id}>
-            <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg'
-            :"http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-top" alt="..." onclick="getMovieById(event, ${pelicula.id})">
-            <div class="card-body">
-            <h6 class="card-title">${pelicula.title}</h6>
-            </div>
-            </div>`;
-                })
-            } else {
-                document.querySelector('.divMovies').innerHTML = '';
-            }
+            injectinDivMovies (peliculas);
         })
-        .catch(error => console.error(error))
+        .catch(error => console.error(error));
 }
 
 function getMoviesByGenreAndByReleaseDate(genreId) {
-    axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=release_date.desc
-    &include_adult=false&page=1&release_date.gte=2019&vote_count.gte=100&with_genres=${genreId}`)
+    axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&sort_by=release_date.desc&include_adult=false&page=1&release_date.gte=2019&vote_count.gte=100&with_genres=${genreId}`)
         .then(res => {
             const peliculas = res.data.results;
-            document.querySelector('.divCarousel').style.display = "none";
-            document.querySelector('.divCarousel').style.backgroundColor = "transparent";
-            if (peliculas.length > 0) {
-                document.querySelector('.divMovies').innerHTML = '';
-                peliculas.forEach(pelicula => {
-                    document.querySelector('.divMovies').innerHTML += `
-                    <div class="card" id=${pelicula.id}>
-                    <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg'
-                    :"http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-top" alt="..." onclick="getMovieById(event, ${pelicula.id})">
-                    <div class="card-body">
-                    <h6 class="card-title">${pelicula.title}</h6>
-                    </div>
-                    </div>`;
-                })
-            } else {
-                document.querySelector('.divMovies').innerHTML = '';
-            }
+            injectinDivMovies (peliculas);
         })
-        .catch(error => console.error(error))
+        .catch(error => console.error(error));
 }
 
 function getMoviesByGenreAndByTitleDesc(genreId) {
-    axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&vote_count.gte=100&language=es-ES&
-    sort_by=title.asc&page=40&with_genres=${genreId}`)
+    axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&vote_count.gte=100&language=es-ES&sort_by=original_title.asc&page=1&with_genres=${genreId}`)
         .then(res => {
             const peliculas = res.data.results;
-            document.querySelector('.divCarousel').style.display = "none";
-            document.querySelector('.divCarousel').style.backgroundColor = "transparent";
-            if (peliculas.length > 0) {
-                document.querySelector('.divMovies').innerHTML = '';
-                peliculas.forEach(pelicula => {
-                    document.querySelector('.divMovies').innerHTML += `
-        <div class="card" id=${pelicula.id}>
-        <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg':"http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-top" alt="..." onclick="getMovieById(event, ${pelicula.id})">
-        <div class="card-body">
-        <h6 class="card-title">${pelicula.title}</h6>
-        </div>
-        </div>`;
-                })
-            } else {
-                document.querySelector('.divMovies').innerHTML = '';
-            }
+            injectinDivMovies (peliculas);
         })
-        .catch(error => console.error(error))
-    document.querySelector('.divMovies').innerHTML = '';
+        .catch(error => console.error(error));
 }
 
 function getMoviesByGenreAndByTitleAsc(genreId) {
-    document.querySelector('.divMovies').innerHTML = '';
+    axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=cea68b520beecac6718820e4ac576c3a&vote_count.gte=100&language=es-ES&sort_by=original_title.desc&page=1&with_genres=${genreId}`)
+        .then(res => {
+            const peliculas = res.data.results;
+            injectinDivMovies (peliculas);
+        })
+        .catch(error => console.error(error));
 }
