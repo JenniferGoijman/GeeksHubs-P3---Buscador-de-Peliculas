@@ -115,6 +115,7 @@ function getPopularMovies(page = 1) {
     //Mostrar carousel
     document.querySelector('.divCarousel').style.display = "block";
     document.querySelector('.divCarousel').style.backgroundColor = "#98ccd3";
+    document.querySelector('.currentPage').style.visibility = "visible";
 }
 
 searchInput.addEventListener("input", function (event) {
@@ -226,6 +227,7 @@ function loadMoviesByGenre(genreName, genreId) {
     document.querySelector('.whatAreWeSeeing select').style.visibility = 'visible';
     document.querySelector('.whatAreWeSeeing select').selectedIndex = '0';
     document.querySelector('.divMovies').innerHTML = '';
+    document.querySelector('.currentPage').style.visibility = "visible";
     filterMoviesByGenreAndSelectedOption(document.getElementById("mySelect"));
 }
 
@@ -284,13 +286,6 @@ function injectInDivMovies(peliculasData) {
     }
 }
 
-function loadMoviesByActor() {
-    hideCarousel();
-    document.querySelector('.divMovies').innerHTML = '';
-
-
-}
-
 function getActorsByQuery(event) {
     busqueda = event.target.value;
     mode = "searchCast";
@@ -317,13 +312,13 @@ function getActorsByQuery(event) {
         .catch(error => console.error(error));
 }
 
-function myFunction() {
-    document.getElementById("myDropdown").classList.toggle("show");
+function actorsDropdownFunction() {
+    document.getElementById("actorsDropdown").classList.toggle("show");
 }
 
 
-function myFunction2() {
-    document.getElementById("myDropdown2").classList.toggle("show");
+function moviesDropdownFunction() {
+    document.getElementById("moviesDropdown").classList.toggle("show");
 }
 
 function getMoviesByActorId(actorId, actorName) {
@@ -349,9 +344,10 @@ function getMoviesByActorId(actorId, actorName) {
         })
         .catch(error => console.error(error));
     hideCarousel();
+    actorsDropdownFunction();
     document.querySelector('#prevPage').style.visibility = "hidden";
     document.querySelector('#nextPage').style.visibility = "hidden";
     document.querySelector('.currentPage').style.visibility = "hidden";
-    myFunction();
     document.querySelector('.whatAreWeSeeing h4').innerHTML = `Peliculas en la que aparece "${actorName}"`;
+    document.querySelector('#searchCast').value = '';
 }
