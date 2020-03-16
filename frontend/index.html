@@ -35,6 +35,17 @@
                     </a>
                     <div class="dropdown-menu listaGeneros" aria-labelledby="navbarDropdown"></div>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" onclick="myFunction()" aria-haspopup="true"
+                        aria-expanded="false">Actores</a>
+                    <div id="myDropdown" class="dropdown-content">
+                        <input class="form-control" id="searchCast" placeholder="Ingrese el nombre del actor..."
+                            onkeyup="getActorsByQuery(event)">
+                        <div class="divActors"></div>
+                    </div>
+                </li>
+
             </ul>
             <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="search" placeholder="Buscador...">

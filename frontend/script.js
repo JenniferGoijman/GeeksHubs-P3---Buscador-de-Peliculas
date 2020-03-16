@@ -97,7 +97,7 @@ function visibilityPrevPage() {
     }
 }
 
-function hideCarousel () {
+function hideCarousel() {
     document.querySelector('.divCarousel').style.display = "none";
     document.querySelector('.divCarousel').style.backgroundColor = "transparent";
 }
@@ -128,14 +128,14 @@ const getMoviesByQuery = () => {
     document.querySelector('.currentPage').innerText = page;
     visibilityPrevPage();
     document.querySelector('.whatAreWeSeeing h4').innerHTML = `Películas que contienen en el título "${busqueda}"`;
-    getMovies (`https://api.themoviedb.org/3/search/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&query=${busqueda}&page=${page}`);
+    getMovies(`https://api.themoviedb.org/3/search/movie?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&query=${busqueda}&page=${page}`);
 }
 
 searchInput.addEventListener("keyup", function (event) {
     busqueda = event.target.value;
     mode = "search";
     page = 1;
-    hideCarousel ();
+    hideCarousel();
     getMoviesByQuery()
 })
 
@@ -170,13 +170,13 @@ function getMovieById(event, movieId) {
 }
 
 function getSimilarMovies(movieId, movieName) {
-    if (mode !== "similar"+movieId) {
+    if (mode !== "similar" + movieId) {
         page = 1;
         document.querySelector('.currentPage').innerText = page;
         document.querySelector('.whatAreWeSeeing h4').innerHTML = `Películas similares a "${movieName}"`;
         document.querySelector('.whatAreWeSeeing h4').id = `${movieId}`;
     }
-    mode = "similar"+movieId;
+    mode = "similar" + movieId;
     visibilityPrevPage();
     getMovies(`https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=cea68b520beecac6718820e4ac576c3a&language=es-ES&page=${page}`);
 }
@@ -231,12 +231,12 @@ function loadMoviesByGenre(genreName, genreId) {
 
 function filterMoviesByGenreAndSelectedOption(element) {
     let genreId = document.getElementById("mySelect").parentElement.firstElementChild.id;
-    
-    if (mode !== element.selectedIndex+"genre"+genreId) {
+
+    if (mode !== element.selectedIndex + "genre" + genreId) {
         page = 1;
         document.querySelector('.currentPage').innerText = page;
     }
-    mode = element.selectedIndex+"genre"+genreId;
+    mode = element.selectedIndex + "genre" + genreId;
     visibilityPrevPage();
 
     if (element.selectedIndex === 0) {
@@ -250,13 +250,15 @@ function filterMoviesByGenreAndSelectedOption(element) {
     }
 }
 
-function getMovies (url) {
+function getMovies(url) {
     axios.get(url)
-        .then(res => { injectInDivMovies(res.data) })
+        .then(res => {
+            injectInDivMovies(res.data)
+        })
         .catch(error => console.error(error));
 }
 
-function injectInDivMovies (peliculasData) {
+function injectInDivMovies(peliculasData) {
     let totalPages = peliculasData.total_pages;
     const peliculas = peliculasData.results;
     if (peliculas.length > 0) {
@@ -280,4 +282,71 @@ function injectInDivMovies (peliculasData) {
     } else {
         document.querySelector('#nextPage').style.visibility = "visible";
     }
+}
+
+function loadMoviesByActor() {
+    hideCarousel();
+    document.querySelector('.divMovies').innerHTML = '';
+    
+    
+}
+
+function getActorsByQuery(event) {
+    busqueda = event.target.value;
+    mode = "searchCast";
+    page = 1;
+    axios.get(`http://api.tmdb.org/3/search/person?api_key=cea68b520beecac6718820e4ac576c3a&query=${busqueda}&page=${page}`)
+        .then(res => {
+            let totalPages = res.data.total_pages;
+            const actores = res.data.results;
+            if (actores.length > 0) {
+                document.querySelector('.divActors').innerHTML = '';
+                actores.forEach(actor => {
+                    document.querySelector('.divActors').innerHTML += `<a href="#" id=${actor.id} onclick="getMoviesByActorId(${actor.id},'${actor.name}')"> <img src="${actor.profile_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg':"http://image.tmdb.org/t/p/w45/"+actor.profile_path}" class="actors" alt="...">${actor.name}</a>`;
+                })
+            } else {
+                document.querySelector('.divActors').innerHTML = '';
+                document.querySelector('.whatAreWeSeeing h4').innerHTML = `No se encontraron actores"`;
+            }
+            if (page === totalPages) {
+                document.querySelector('#nextPage').style.visibility = "hidden";
+            } else {
+                document.querySelector('#nextPage').style.visibility = "visible";
+            }
+        })
+        .catch(error => console.error(error));
+}
+
+function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+}
+
+function getMoviesByActorId(actorId, actorName) {
+    axios.get(`https://api.themoviedb.org/3/person/${actorId}?api_key=cea68b520beecac6718820e4ac576c3a&append_to_response=credits`)
+        .then(res => {
+            const peliculas = res.data.credits.cast;
+            if (peliculas.length > 0) {
+                document.querySelector('.divMovies').innerHTML = '';
+                peliculas.forEach(pelicula => {
+                    document.querySelector('.divMovies').innerHTML += `
+                    <div class="card" id=${pelicula.id}>
+                    <img src="${pelicula.poster_path==null?'https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg'
+                    :"http://image.tmdb.org/t/p/w185/"+pelicula.poster_path}" class="card-img-top" alt="..." onclick="getMovieById(event, ${pelicula.id})">
+                    <div class="card-body">
+                    <h6 class="card-title">${pelicula.title}</h6>
+                    </div>
+                    </div>`;
+                })
+            } else {
+                document.querySelector('.divMovies').innerHTML = '';
+                document.querySelector('.whatAreWeSeeing h4').innerHTML = `No se encontraron películas"`;
+            }
+        })
+        .catch(error => console.error(error));
+        hideCarousel();
+        document.querySelector('#prevPage').style.visibility = "hidden";
+        document.querySelector('#nextPage').style.visibility = "hidden";
+        document.querySelector('.currentPage').style.visibility = "hidden";
+        myFunction();
+        document.querySelector('.whatAreWeSeeing h4').innerHTML = `Peliculas en la que aparece "${actorName}"`;
 }
