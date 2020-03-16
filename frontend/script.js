@@ -287,8 +287,8 @@ function injectInDivMovies(peliculasData) {
 function loadMoviesByActor() {
     hideCarousel();
     document.querySelector('.divMovies').innerHTML = '';
-    
-    
+
+
 }
 
 function getActorsByQuery(event) {
@@ -321,6 +321,11 @@ function myFunction() {
     document.getElementById("myDropdown").classList.toggle("show");
 }
 
+
+function myFunction2() {
+    document.getElementById("myDropdown2").classList.toggle("show");
+}
+
 function getMoviesByActorId(actorId, actorName) {
     axios.get(`https://api.themoviedb.org/3/person/${actorId}?api_key=cea68b520beecac6718820e4ac576c3a&append_to_response=credits`)
         .then(res => {
@@ -343,10 +348,10 @@ function getMoviesByActorId(actorId, actorName) {
             }
         })
         .catch(error => console.error(error));
-        hideCarousel();
-        document.querySelector('#prevPage').style.visibility = "hidden";
-        document.querySelector('#nextPage').style.visibility = "hidden";
-        document.querySelector('.currentPage').style.visibility = "hidden";
-        myFunction();
-        document.querySelector('.whatAreWeSeeing h4').innerHTML = `Peliculas en la que aparece "${actorName}"`;
+    hideCarousel();
+    document.querySelector('#prevPage').style.visibility = "hidden";
+    document.querySelector('#nextPage').style.visibility = "hidden";
+    document.querySelector('.currentPage').style.visibility = "hidden";
+    myFunction();
+    document.querySelector('.whatAreWeSeeing h4').innerHTML = `Peliculas en la que aparece "${actorName}"`;
 }

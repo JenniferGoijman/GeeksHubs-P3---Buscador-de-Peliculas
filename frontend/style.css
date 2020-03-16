@@ -18,6 +18,11 @@ header {
     color: #132238;
 }
 
+.nav-link {
+    width: 100px;
+    text-align: center;
+}
+
 .nav-link:hover {
     opacity: 0.75;
 }
@@ -185,6 +190,7 @@ img.actors {
     width: 35px;
     margin-right: 10px;
 }
+
 /* Dropdown Button */
 .dropbtn {
 background-color: #4CAF50;
@@ -293,6 +299,9 @@ display: block;
     .modalInfo {
         font-size: 12px;
         padding: 0;
+    }
+    #myDropdown, #myDropdown2 {
+        position: static;
     }
 }
 
