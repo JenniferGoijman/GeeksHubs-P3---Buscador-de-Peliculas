@@ -18,11 +18,6 @@ header {
     color: #132238;
 }
 
-.nav-link {
-    width: 100px;
-    text-align: center;
-}
-
 .nav-link:hover {
     opacity: 0.75;
 }
