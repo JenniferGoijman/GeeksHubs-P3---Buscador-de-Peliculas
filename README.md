@@ -11,7 +11,7 @@ It was made with HTML3, CCS3, Bootstrap, JavaScript & [The Movie DB API](https:/
 
 The website design is resposive.
 
-![foto](homeresponsive.png) 
+![foto](/homeresponsive.png) 
 
 ### Movie details
 ![foto](moviemodal.png) 
