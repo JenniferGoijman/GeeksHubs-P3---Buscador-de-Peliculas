@@ -6,21 +6,21 @@ It was made with HTML3, CCS3, Bootstrap, JavaScript & [The Movie DB API](https:/
 ## Views
 
 ### Home
-![foto](frontend/img/home.png)
+![foto](home.png)
 The website design is resposive.
-![foto](frontend/img/homeresponsive.png) 
+![foto](homeresponsive.png) 
 
 ### Movie details
-![foto](frontend/img/moviemodal.png) 
+![foto](moviemodal.png) 
 
 ### Similars movies
-![foto](frontend/img/similars.png) 
+![foto](similars.png) 
 
 ### Filter by movie name
-![foto](frontend/img/filtermovie.png)
+![foto](filtermovie.png)
 
 ### Filter by actor
-![foto](frontend/img/filtercast.png) 
+![foto](img/filtercast.png) 
 
 You can see the demo here: https://jennifergoijman.github.io/GeeksHubs-P3---Buscador-de-Peliculas/
 
