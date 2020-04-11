@@ -10,8 +10,7 @@ It was made with HTML3, CCS3, Bootstrap, JavaScript & [The Movie DB API](https:/
 ![foto](home.png)
 
 The website design is resposive.
-
-
+![foto](homeresponsive.png) 
 
 ### Movie details
 ![foto](moviemodal.png) 
